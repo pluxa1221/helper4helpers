@@ -1,0 +1,95 @@
+package org.nevetime.helper4Helpers.managers;
+
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.model.group.Group;
+import net.luckperms.api.node.matcher.NodeMatcher;
+import net.luckperms.api.node.types.InheritanceNode;
+import org.bukkit.entity.Player;
+import org.nevetime.helper4Helpers.Helper4Helpers;
+
+import java.util.HashMap;
+import java.util.Set;
+import java.util.UUID;
+
+public class QuestionManager {
+    private MiniMessage miniMessage = MiniMessage.miniMessage();
+
+    private Helper4Helpers plugin = Helper4Helpers.getInstance();
+    private ConfigManager config = plugin.getConfigManager();
+
+    private LuckPerms luckperms = plugin.getLuckPerms();
+
+    private HashMap<UUID, Player> askedPlayers = new HashMap<>();
+    private HashMap<UUID, String> incomingQuestions = new HashMap<>();
+    private HashMap<String, String> answeredQuestions = new HashMap<>();
+
+    private final Group group;
+
+    public QuestionManager() {
+         group = luckperms.getGroupManager().getGroup(config.getSupportGroup());
+    }
+
+    public Set<UUID> getIncomingQuestionIds() {
+        return incomingQuestions.keySet();
+    }
+
+    public Player getAskedPlayer(UUID questionId) {
+        return askedPlayers.get(questionId);
+    }
+
+    public String getQuestionText(UUID questionId) {
+        return incomingQuestions.get(questionId);
+    }
+
+    public UUID ask(Player askedPlayer, String question) {
+        UUID uuid = UUID.randomUUID();
+
+        incomingQuestions.put(uuid, question);
+        askedPlayers.put(uuid, askedPlayer);
+
+        luckperms.getUserManager().searchAll(
+                NodeMatcher.key(
+                        InheritanceNode.builder(group).build()
+                )
+        ).thenApply(map -> {
+            for (UUID uid : map.keySet()) {
+                Player player = plugin.getServer().getPlayer(uid);
+
+                player.sendMessage(config.getMessage("question.new"));
+            }
+
+            return null;
+        });
+
+        return uuid;
+    }
+
+    public void answer(Player player, UUID question, String answer) {
+        if (!incomingQuestions.containsKey(question)) {
+            player.sendMessage(config.getMessage("question.not_found"));
+            return;
+        }
+
+        if (answer.isEmpty()) {
+            player.sendMessage(config.getMessage("answer.empty"));
+            return;
+        }
+
+        if (!askedPlayers.get(question).isOnline()) {
+            player.sendMessage(config.getMessage("player.offline"));
+            return;
+        }
+
+        player.sendMessage(config.getMessage("answer.delivered"));
+        askedPlayers.get(question).sendMessage(miniMessage.deserialize(config.getPrefix() + " " + config.getMessage("answer.received") + answer));
+
+        answeredQuestions.put(
+                incomingQuestions.get(question),
+                answer
+        );
+
+        incomingQuestions.remove(question);
+        askedPlayers.remove(question);
+    }
+}
