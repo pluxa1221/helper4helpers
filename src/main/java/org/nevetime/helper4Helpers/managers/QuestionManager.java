@@ -75,7 +75,7 @@ public class QuestionManager {
         }
 
         player.sendMessage(config.getMessage("answer.delivered"));
-        incomingQuestions.get(question).getAskedPlayer().sendMessage(miniMessage.deserialize(config.getPrefix() + " " + config.getMessage("answer.received") + answer));
+        incomingQuestions.get(question).getAskedPlayer().sendMessage(miniMessage.deserialize(config.getPrefix() + " " + config.getRawMessage("answer.received") + answer));
 
         incomingQuestions.remove(question);
     }
