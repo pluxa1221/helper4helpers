@@ -7,9 +7,6 @@ load: POSTWORLD
 
 authors: [ MihailPrud ]
 
-depend:
-  - luckperms
-
 commands:
   ask:
     usage: /ask <вопрос>
