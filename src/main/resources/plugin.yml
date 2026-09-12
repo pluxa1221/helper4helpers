@@ -1,0 +1,8 @@
+name: Helper4Helpers
+version: '${version}'
+
+main: org.nevetime.helper4Helpers.Helper4Helpers
+api-version: '26.2'
+load: POSTWORLD
+
+authors: [ MihailPrud ]
