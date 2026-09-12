@@ -6,3 +6,6 @@ api-version: '26.2'
 load: POSTWORLD
 
 authors: [ MihailPrud ]
+
+depend:
+  - luckperms
