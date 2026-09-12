@@ -20,6 +20,24 @@ public class ConfigManager {
         return config.getString("prefix", "<gradient:#18A48D:#299431>вопро</gradient><gradient:#299431:#299431>сы</gradient> <gray>|</gray>");
     }
 
+    public String getRawMessage(String key) {
+        return config.getString("messages." + key);
+    }
+
+    public String getRawMessage(String key, boolean insertPrefix) {
+        if (insertPrefix) return config.getString("messages." + key);
+        else return getRawMessage(key);
+    }
+
+    public String getRawMessage(String key, String def) {
+        return config.getString("messages." + key, def);
+    }
+
+    public String getRawMessage(String key, boolean insertPrefix, String def) {
+        if (insertPrefix) return config.getString("messages." + key, def);
+        else return config.getString("messages." + key, def);
+    }
+
     public Component getMessage(String key) {
         return applyMiniMessage(getPrefix() + " " + config.getString("messages." + key));
     }
