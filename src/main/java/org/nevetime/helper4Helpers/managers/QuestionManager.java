@@ -1,10 +1,6 @@
 package org.nevetime.helper4Helpers.managers;
 
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.luckperms.api.LuckPerms;
-import net.luckperms.api.model.group.Group;
-import net.luckperms.api.node.matcher.NodeMatcher;
-import net.luckperms.api.node.types.InheritanceNode;
 import org.bukkit.entity.Player;
 import org.nevetime.helper4Helpers.Helper4Helpers;
 
@@ -18,17 +14,11 @@ public class QuestionManager {
     private Helper4Helpers plugin = Helper4Helpers.getInstance();
     private ConfigManager config = plugin.getConfigManager();
 
-    private LuckPerms luckperms = plugin.getLuckPerms();
-
     private HashMap<UUID, Player> askedPlayers = new HashMap<>();
     private HashMap<UUID, String> incomingQuestions = new HashMap<>();
     private HashMap<String, String> answeredQuestions = new HashMap<>();
 
-    private final Group group;
-
-    public QuestionManager() {
-         group = luckperms.getGroupManager().getGroup(config.getSupportGroup());
-    }
+    public QuestionManager() {}
 
     public Set<UUID> getIncomingQuestionIds() {
         return incomingQuestions.keySet();
@@ -48,19 +38,9 @@ public class QuestionManager {
         incomingQuestions.put(uuid, question);
         askedPlayers.put(uuid, askedPlayer);
 
-        luckperms.getUserManager().searchAll(
-                NodeMatcher.key(
-                        InheritanceNode.builder(group).build()
-                )
-        ).thenApply(map -> {
-            for (UUID uid : map.keySet()) {
-                Player player = plugin.getServer().getPlayer(uid);
-
-                player.sendMessage(config.getMessage("question.new"));
-            }
-
-            return null;
-        });
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
+            if (player.hasPermission("helper4helpers.answer")) player.sendMessage(config.getMessage("question.new"));
+        }
 
         return uuid;
     }
