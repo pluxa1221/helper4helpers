@@ -3,6 +3,7 @@ package org.nevetime.helper4Helpers.managers;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Player;
 import org.nevetime.helper4Helpers.Helper4Helpers;
+import org.nevetime.helper4Helpers.model.Question;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -14,29 +15,41 @@ public class QuestionManager {
     private Helper4Helpers plugin = Helper4Helpers.getInstance();
     private ConfigManager config = plugin.getConfigManager();
 
-    private HashMap<UUID, Player> askedPlayers = new HashMap<>();
-    private HashMap<UUID, String> incomingQuestions = new HashMap<>();
-    private HashMap<String, String> answeredQuestions = new HashMap<>();
+    private HashMap<UUID, Question> incomingQuestions = new HashMap<>();
+
+    private int questionId = 1;
 
     public QuestionManager() {}
+
+    public UUID getUuidByIntId(int intId) {
+        for (HashMap.Entry<UUID, Question> entry : incomingQuestions.entrySet()) {
+            if (entry.getValue().getId() == intId) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
 
     public Set<UUID> getIncomingQuestionIds() {
         return incomingQuestions.keySet();
     }
 
-    public Player getAskedPlayer(UUID questionId) {
-        return askedPlayers.get(questionId);
-    }
-
-    public String getQuestionText(UUID questionId) {
+    public Question getQuestion(UUID questionId) {
         return incomingQuestions.get(questionId);
     }
 
     public UUID ask(Player askedPlayer, String question) {
         UUID uuid = UUID.randomUUID();
 
-        incomingQuestions.put(uuid, question);
-        askedPlayers.put(uuid, askedPlayer);
+        Question quest = new Question(
+                questionId,
+                askedPlayer,
+                question
+        );
+
+        questionId++;
+
+        incomingQuestions.put(uuid, quest);
 
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (player.hasPermission("helper4helpers.answer")) player.sendMessage(config.getMessage("question.new"));
@@ -56,20 +69,14 @@ public class QuestionManager {
             return;
         }
 
-        if (!askedPlayers.get(question).isOnline()) {
+        if (!incomingQuestions.get(question).getAskedPlayer().isOnline()) {
             player.sendMessage(config.getMessage("player.offline"));
             return;
         }
 
         player.sendMessage(config.getMessage("answer.delivered"));
-        askedPlayers.get(question).sendMessage(miniMessage.deserialize(config.getPrefix() + " " + config.getMessage("answer.received") + answer));
-
-        answeredQuestions.put(
-                incomingQuestions.get(question),
-                answer
-        );
+        incomingQuestions.get(question).getAskedPlayer().sendMessage(miniMessage.deserialize(config.getPrefix() + " " + config.getMessage("answer.received") + answer));
 
         incomingQuestions.remove(question);
-        askedPlayers.remove(question);
     }
 }
