@@ -16,6 +16,9 @@ public final class Helper4Helpers extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
+
+        instance = this;
+
         saveConfig();
 
         configManager = new ConfigManager(this);
@@ -25,8 +28,6 @@ public final class Helper4Helpers extends JavaPlugin {
 
         getCommand("answer").setExecutor(new AnswerCommand());
         getCommand("answer").setTabCompleter(new AnswerCommand());
-
-        instance = this;
     }
 
     @Override
