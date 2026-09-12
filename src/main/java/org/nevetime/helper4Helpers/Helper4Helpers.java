@@ -7,13 +7,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Helper4Helpers extends JavaPlugin {
 
-    public Helper4Helpers instance = this;
+    private static Helper4Helpers instance;
 
     private LuckPerms luckperms;
 
     @Override
     public void onEnable() {
         // Plugin startup logic
+        instance = this;
+
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) {
             luckperms = provider.getProvider();
@@ -29,7 +31,7 @@ public final class Helper4Helpers extends JavaPlugin {
         return luckperms;
     }
 
-    public Helper4Helpers getInstance() {
+    public static Helper4Helpers getInstance() {
         return instance;
     }
 }
