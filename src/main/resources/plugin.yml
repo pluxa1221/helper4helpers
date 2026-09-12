@@ -6,3 +6,26 @@ api-version: '26.2'
 load: POSTWORLD
 
 authors: [ MihailPrud ]
+
+depend:
+  - luckperms
+
+commands:
+  ask:
+    usage: /ask <вопрос>
+    description: Задать вопрос составу проекта
+    permission: helper4helpers.ask
+
+  answer:
+    usage: /answer <номер> <текст вопроса>
+    description: Ответить на вопрос игрока
+    permission: helper4helpers.answer
+
+permissions:
+  helper4helpers.ask:
+    description: Базовое право для игрока задать вопрос
+    default: true
+
+  helper4helpers.answer:
+    description: Право для хелпера или другой роли тех. поддержки ответить на вопрос
+    default: op

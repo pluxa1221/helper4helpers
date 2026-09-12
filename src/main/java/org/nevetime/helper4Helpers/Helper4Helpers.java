@@ -1,6 +1,8 @@
 package org.nevetime.helper4Helpers;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import org.nevetime.helper4Helpers.commands.AnswerCommand;
+import org.nevetime.helper4Helpers.commands.AskCommand;
 import org.nevetime.helper4Helpers.managers.ConfigManager;
 import org.nevetime.helper4Helpers.managers.QuestionManager;
 
@@ -18,6 +20,11 @@ public final class Helper4Helpers extends JavaPlugin {
 
         configManager = new ConfigManager(this);
         questionManager = new QuestionManager();
+
+        getCommand("ask").setExecutor(new AskCommand());
+
+        getCommand("answer").setExecutor(new AnswerCommand());
+        getCommand("answer").setTabCompleter(new AnswerCommand());
 
         instance = this;
     }
