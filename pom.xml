@@ -6,7 +6,7 @@
 
     <groupId>org.nevetime</groupId>
     <artifactId>Helper4Helpers</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <name>Helper4Helpers</name>
