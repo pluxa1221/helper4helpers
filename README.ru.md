@@ -39,3 +39,9 @@
 ## Роадмап
 
 1. Сделать интеграцию с `Vault` для выдачи наград.
+
+## Лицензия
+
+Copyright (C) 2026 Nevetime
+
+Licensed under the GNU GPLv3.

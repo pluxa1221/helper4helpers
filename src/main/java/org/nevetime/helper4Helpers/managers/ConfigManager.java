@@ -1,3 +1,12 @@
+/*
+ * Helper4Helpers — Ticket management system for Minecraft.
+ * Copyright (C) 2026 Nevetime
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License...
+ */
+
 package org.nevetime.helper4Helpers.managers;
 
 import net.kyori.adventure.text.Component;

@@ -49,3 +49,9 @@ When a helper types `/answer` without arguments, the plugin generates a clean, s
 
 * [ ] **Vault Economy Integration:** Automatically reward helpers with money or points for answering questions.
 * [ ] **Discord Logging:** Send every ticket and reply directly to your staff Discord channel via webhooks.
+
+## License
+
+Copyright (C) 2026 Nevetime
+
+Licensed under the GNU GPLv3.
